@@ -1,4 +1,3 @@
-const name = require('./utils')
+const notes = require('./notes')
 
-
-console.log(name)
+console.log(notes())
