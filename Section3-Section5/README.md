@@ -41,7 +41,7 @@
                     }
                 })
                 ```
-                *   YargsArguments: You can add arguments in the yarg command by adding a builder property in the object with the argument property name you want to use. These property name are objects which you can define a describiption `describe` of the property and a required option which is called `demandOption`
+                *   YargsArguments: You can add arguments in the yarg command by adding a builder property in the object with the argument property name you want to use. These property name are objects which you can define a describiption `describe` of the property and a required option which is called `demandOption` and you can define the type of data with `type`
                     ```js
                     yargs.command({
                         command: 'add',
@@ -49,7 +49,8 @@
                         builder:{
                             title: {
                                 describe: 'Note Title',
-                                demandOption: true
+                                demandOption: true,
+                                type: 'array'
                             }
                         },
                         handler: function(argv){
