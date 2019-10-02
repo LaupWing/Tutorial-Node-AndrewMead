@@ -59,7 +59,7 @@
                     })
                     ```
 ### JSON
-*   If you want to convert your JSON data to a string you need to use JSON.stringify. Example = `JSON.stringify(data)` See below how the data changes. The reason why you want to make a string of the JSON data is that some of the packages can only read string data like the fs package.
+*   **JSON.stringify**: If you want to convert your JSON data to a string you need to use JSON.stringify. Example = `JSON.stringify(data)` See below how the data changes. The reason why you want to make a string of the JSON data is that some of the packages can only read string data like the fs package.
     ```js
     // Before
     const book = {
@@ -74,4 +74,5 @@
         'author' : 'LaupWing'
     }
     ```
+*   **JSON.parse**: The reverse of the JSON.stringify is the JSON.parse. It will make a object from a string. See above but in reverse
     
