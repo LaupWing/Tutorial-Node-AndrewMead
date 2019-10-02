@@ -75,4 +75,32 @@
     }
     ```
 *   **JSON.parse**: The reverse of the JSON.stringify is the JSON.parse. It will make a object from a string. See above but in reverse
-    
+
+### Property function with this binding
+*   **No this binding**
+    ```js
+    const obj = {
+        name: 'Laup Wing',
+        print: ()=>{
+            console.log('Hello World', this.name)
+        }
+    }
+    ```
+*   **This binding**
+    ```js
+    const obj = {
+        name: 'Laup Wing',
+        print: function(){
+            console.log('Hello World', this.name)
+        }
+    }
+    ```
+    **__or__**
+    ```js
+    const obj = {
+        name: 'Laup Wing',
+        print(){
+            console.log('Hello World', this.name)
+        }
+    }
+    ```
