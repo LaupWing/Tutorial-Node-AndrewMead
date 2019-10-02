@@ -29,4 +29,32 @@
         *   The second is second to the path app.js file (where you put the console.log)
         *   The third is the value that you put in the console.log
     *   String Parsing (Yargs)
+        *   With the Yargs package you can print out formatted strings in your console.log by `console.log(yargs.argv)` it will format the data you put behind your node statement
+        *   You can customize your Yargs to fit your needs. By default yargs begins with version 1.0.0.. You can check this version by typing in --version behind your node command like `node app.js --version`
+            *   YargsCommand: In order to customize yargs you need to set yargs command settings. The command is the name of the command, describe is a describtion and handler is the code that will be executed when starting the yarg command. To start this yarg command just simply run the bash command like this `node app.js add`
+                ```js
+                yargs.command({
+                    command: 'add',
+                    describe:'Add a new note',
+                    handler: function(){
+                        console.log('Adding a new note')
+                    }
+                })
+                ```
+                *   YargsArguments: You can add arguments in the yarg command by adding a builder property in the object with the argument property name you want to use. These property name are objects which you can define a describiption `describe` of the property and a required option which is called `demandOption`
+                    ```js
+                    yargs.command({
+                        command: 'add',
+                        describe:'Add a new note',
+                        builder:{
+                            title: {
+                                describe: 'Note Title',
+                                demandOption: true
+                            }
+                        },
+                        handler: function(argv){
+                            console.log('Adding a new note', argv)
+                        }
+                    })
+                    ```
     
