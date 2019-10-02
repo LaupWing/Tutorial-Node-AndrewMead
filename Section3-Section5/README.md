@@ -76,7 +76,8 @@
     ```
 *   **JSON.parse**: The reverse of the JSON.stringify is the JSON.parse. It will make a object from a string. See above but in reverse
 
-### Property function with this binding
+### ES6 Arrow Function
+In ES6 you can use arrow functions to declare your function. The important part of using the arrow functions is that a normal function has his own this binding and arrow function not see below for examples. A arrow function uses its parent this binding
 *   **No this binding**
     ```js
     const obj = {
@@ -104,3 +105,30 @@
         }
     }
     ```
+*   **Nested This**
+    *   **This.name is undefined**
+        ```js
+        const event = {
+            name: 'Birthday Party',
+            guestList: ['Omar', 'Hau', 'Jorian'],
+            print(){
+                console.log('List for ', this.name) // this.name works
+                this.guestList.forEach(function(guest){
+                    console.log(guest + 'is attending'+ this.name) // this.name doesnt work This is now the window object
+                })
+            }
+        }
+        ```
+    *   **This.name keyword works**
+        ```js
+        const event = {
+            name: 'Birthday Party',
+            guestList: ['Omar', 'Hau', 'Jorian'],
+            print(){
+                console.log('List for ', this.name) // this.name works
+                this.guestList.forEach((guest)=>{
+                    console.log(guest + 'is attending'+ this.name) // this.name work because arrow function uses parent this binding
+                })
+            }
+        }
+        ```
