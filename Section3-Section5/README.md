@@ -132,3 +132,6 @@ In ES6 you can use arrow functions to declare your function. The important part 
             }
         }
         ```
+### Debugging Node
+*   **`debugger`**
+    The debugger is a build in node debug tool. By inserting the `debugger` in your code you want to debug. To start this debugger you need to type in your command `node inspect` in order to stop the script from running. Then you will need to open a chrome tab and type in `chrome://inspect`. You can restart the debugger by typing in `restart`

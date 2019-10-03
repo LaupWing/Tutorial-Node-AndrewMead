@@ -8,8 +8,8 @@ const getNotes = ()=>{
 
 const addNote = (title, body)=>{
     const notes = loadNotes()
-    const duplicateNotes = notes.filter(note=>note.title === title)
-    if(duplicateNotes.length === 0){
+    const duplicateNote = notes.find(note=>note.title === title)
+    if(!duplicateNote){
         notes.push({
             title,
             body
@@ -33,6 +33,26 @@ const removeNote = (title)=>{
     }
 }
 
+
+const readNote = (title) =>{
+    const notes = loadNotes()
+    const findNote = notes.find(note=>note.title === title)
+    if(findNote){
+        console.log(`${logs.succes('Title '+findNote.title)} Body: ${findNote.body}`)
+    }else{
+        console.log(`${logs.fail('None Found')}`)
+    }
+}
+
+const listNotes = () =>{
+    const notes = loadNotes()
+    console.log(logs.succes('Your notes'))
+    notes.forEach(note=>{
+        console.log(`Title: ${logs.succes(note.title)}`)
+    })
+}
+
+
 const loadNotes = ()=>{
     try{
         return JSON.parse(fs.readFileSync('notes.json').toString())
@@ -45,4 +65,4 @@ const saveNotes = (notes)=>{
     fs.writeFileSync('notes.json', JSON.stringify(notes))
 }
 
-module.exports = {getNotes, addNote, removeNote}
+module.exports = {getNotes, addNote, removeNote, listNotes, readNote}
