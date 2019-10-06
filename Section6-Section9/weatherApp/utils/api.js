@@ -8,8 +8,7 @@ const forecast = (lat, long, callback)=>{
         }else if(response.error){
             callback('cant find location', undefined)
         }else{
-            const data = response.body.currently
-            callback(undefined,data)
+            callback(undefined, response.body.daily.data[0].summary + ' It is currently ' + response.body.currently.temperature + ' degress out. There is a ' + response.body.currently.precipProbability + '% chance of rain.')
         }
     })
 }
@@ -23,7 +22,11 @@ const geocode = (adress, callback)=>{
         }else if(response.body.features.length === 0){
             callback('Adress not found', undefined)
         }else{
-            callback(undefined, response.body.features[0])
+            callback(undefined, {
+                lat: response.body.features[0].center[1],
+                long: response.body.features[0].center[0],
+                location: response.body.features[0].place_name
+            })
         }
     })
 }
