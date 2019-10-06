@@ -83,3 +83,17 @@
     path.join(__dirname, '../') // from the current directory make a path which is one layer above the current directory
     ```
 
+### Express
+*   To use a specifik directery as static directory in express you need to use this code
+    ```js
+    app.use(express.static(path)) // specifiy your path in the place of path
+    ```
+*   `app.set('view engine', 'hbs')`: to set the settings of the express app, first parameter is the what do you want to set and second is the value u want it to set to
+*   **Pathing**
+    *   **Absolute path:** If you have specified your static directory in your express server you can reference to documents by using the path relative from this static directory by beginning with the `/`
+        ```
+        /css/style
+        ```
+    *   **Relative path:** Relative path is the path relative to the current file you are trying to reference to another file
+
+### Handlebars
