@@ -74,3 +74,12 @@
     }
     destructerFunction(person) // call the function with the object you want to destructure
     ```
+
+### Dirname Filename and path
+*   To see what the path is of the directory use `__dirname`
+*   To see what the path is of the current file use  `__filename`
+*   To make a custom path string use the `path` module (which is a core module of node)
+    ```js
+    path.join(__dirname, '../') // from the current directory make a path which is one layer above the current directory
+    ```
+
