@@ -3,15 +3,16 @@ const {forecast} = require('./utils/api')
 
 const searchTerm = process.argv[2]
 if(searchTerm){
-    geocode(searchTerm, (error,geoData)=>{
+    geocode(searchTerm, (error,{lat,long,location})=>{
+        console.log(error)
         if(error){
             return console.log('Error', error)
         }
-        forecast(geoData.lat, geoData.long, (error,forecastData)=>{
+        forecast(lat, long, (error,forecastData)=>{
             if(error){
                 console.log('Error', error)
             }
-            console.log(geoData.location)
+            console.log(location)
             console.log(forecastData)
         })
     })
