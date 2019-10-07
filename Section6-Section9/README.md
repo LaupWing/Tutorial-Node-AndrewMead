@@ -97,3 +97,9 @@
     *   **Relative path:** Relative path is the path relative to the current file you are trying to reference to another file
 
 ### Handlebars
+
+### Nodemon
+*   You can set a watcher on nodemon to watch these file extensions. If you save on hbs for exameple and you didnt set a watcher it will not reload when you save hbs file. In order to do this you need to set it in the bash command. The command is as follows
+    ```bash
+    nodemon src/app.js -e js,hbj
+    ```
