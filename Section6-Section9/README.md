@@ -74,6 +74,19 @@
     }
     destructerFunction(person) // call the function with the object you want to destructure
     ```
+*   **Error Preventing when no object has been assigned:** When you dont define an object into the function about it will try to destructre a undefined object. To fixs this we will need to set a default value for the destructered parameter in the above function like so
+    ```js
+    const destructerFunction = ({name, age, gender})=>{
+        console.log(name, age, gender) 
+    }
+    destructerFunction() // will set an error of name of undefined
+    ```
+    ```js
+    const destructerFunction = ({name, age, gender}={})=>{ // by adding a default object it can run the function
+        console.log(name, age, gender) // this will be undefined because it doesnt exist but the function can still run because we set a default value of an empty objectz
+    }
+    destructerFunction() // will set an error of name of undefined
+    ```
 
 ### Dirname Filename and path
 *   To see what the path is of the directory use `__dirname`

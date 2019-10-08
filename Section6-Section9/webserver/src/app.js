@@ -3,6 +3,8 @@ const express = require('express')
 const app = express()
 const port = 3000
 const hbs = require('hbs')
+const {geocode} = require('./utils/api')
+const {forecast} = require('./utils/api')
 
 // Diffrent paths
 const publicDir =  path.join(__dirname, '../public')
@@ -27,6 +29,28 @@ app
             name: 'Loc Nguyen'
         })
     })
+    .get('/weather', (req,res)=>{
+        if(!req.query.address){
+            return res.send({
+                error: 'You mus provide an address'
+            })
+        }
+        geocode(req.query.address, (error,{lat,long,location}={})=>{
+            if(error){
+                return res.send({error})
+            }
+            forecast(lat,long,(error,forecastData)=>{
+                if(error){
+                    return res.send({error})
+                }
+                res.send({
+                    forecast: forecastData,
+                    location,
+                    address: req.query.address
+                })
+            })
+        })
+    })
     .get('/products', (req,res)=>{
         if (!req.query.search) {
             return res.send({
@@ -37,6 +61,13 @@ app
         console.log(req.query.search)
         res.send({
             products: []
+        })
+    })
+    .get('/help', (req,res)=>{
+        res.render('Help', {
+            title: 'Help',
+            name: 'Loc Nguyen',
+            helpText: 'This is the help page'
         })
     })
     .get('/help/*', (req,res)=>{
