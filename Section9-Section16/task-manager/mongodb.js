@@ -9,7 +9,7 @@ MongoClient.connect(connectionUrl, {useNewUrlParser:true, useUnifiedTopology:tru
         return console.log('Unable to connect',error)
     }
     const db = client.db(databaseName)
-
+    
     db.collection('users').insertOne({
         name: 'Laup',
         age: 24
