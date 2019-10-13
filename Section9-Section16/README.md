@@ -75,3 +75,10 @@
                         // failed
                     })
                     ```
+        *   **ObjectID:** In mongodb every item has an Id stored in an `ObjectID` class object. If you want to receive, delete or update an item with a specifik id you need to use the `ObjectID` method from the `mongodb` package. You cannot search through the database by simply refering to the id with `_id="3ru23o4234"`, but you need to use this ObjectID method around the id.
+            ```js
+            const ObjectID = mongodb.ObjectID
+            {
+                _id: new ObjectID('fr23434f32432423')
+            } 
+            ```
