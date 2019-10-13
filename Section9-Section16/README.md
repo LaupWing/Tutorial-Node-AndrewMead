@@ -38,10 +38,40 @@
                     db.collection('users').insertOne({ // to insert one document
                         name: 'Andrew',
                         age: 27
-                    })
-                    db.collection('users').insertMany({ // to insert multiple documents
-                        name: 'Andrew',
-                        age: 27
-                    })
+                    }, callback) promise // See the next section for how this works
+                    db.collection('users').insertMany(// to insert multiple documents the only diffrence is that you use a array now
+                        [  
+                            { 
+                                name: 'Andrew',
+                                age: 27
+                            },
+                            { 
+                                name: 'LaupWing',
+                                age: 24
+                            }
+                        ], callback) promise // See the next section for how this works
                 })
                 ```
+                *   **Callback or Promise:** You can choose handle the error and succes handling by either a callback or a promise
+                    ```js
+                    // Callback method
+                    db.collection('users').insertOne({
+                        name: 'LaupWing',
+                        age: 24
+                    },(error, result)=>{
+                        // do what you want to do here
+                    })
+                    ```
+                    ```js
+                    // Callback method
+                    db.collection('users').insertOne({
+                        name: 'LaupWing',
+                        age: 24
+                    }
+                    .then(()=>{
+                        // succes
+                    })
+                    .catch(err=?{
+                        // failed
+                    })
+                    ```
