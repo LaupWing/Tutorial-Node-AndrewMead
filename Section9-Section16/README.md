@@ -82,3 +82,4 @@
                 _id: new ObjectID('fr23434f32432423')
             } 
             ```
+        *   **findOne and findAll:** You can look through a mongodb database by using the findOne or findAll methods. 
