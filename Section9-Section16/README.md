@@ -82,4 +82,51 @@
                 _id: new ObjectID('fr23434f32432423')
             } 
             ```
-        *   **findOne and findAll:** You can look through a mongodb database by using the findOne or findAll methods. 
+        *   **findOne:** You can look through a mongodb database by using the findOne or findAll methods. If the findOne methods finds more than 1 matching it will always use the first one found.
+            ```js
+            db
+                .collection('users')
+                .findOne({name: 'Laup'},(err, user)=>{
+                    if(err) return
+                    console.log(user)
+                })
+            ``` 
+        *   **find:** Unlike insert findOne and other similar methods `find` returns a cursor which points to the data. Aftrer the find method you can choose what you want to do with the data, like putting in in an array (`toArray`) or count it etc.
+            ```js
+            db
+                .collection('users')
+                .find({name: 'Laup'}).toArray((err,users)=>{
+                    console.log(users) // returns an array you can also use count to count the results
+                })
+            ``` 
+        *   **updateOne/updateMany:** This is just like the insertOne and insertMany method but than it updates the matching parameter. And in the $set property it updates the things you want it to update.
+            ```js
+            // Callback method
+            db.collection('users').updateOne({
+                name: 'LaupWing' // updates the user with this name
+            },{
+                $set:{
+                    name: 'LocNguyen'
+                }
+            },
+            (error, result)=>{
+                // do what you want to do here
+            })
+            ```
+            ```js
+            // Callback method
+            db.collection('users').updateOne({
+                name: 'LaupWing'
+            },{
+                $set:{
+                    name: 'LocNguyen'
+                }
+            })
+            .then(()=>{
+                // succes
+            })
+            .catch(err=>{
+                // failed
+            })
+            ```
+        *   **deleteOne/deleteMany:** This is exactly like the `insertOne`/`insertMany` methods. But both this one deletes instead of inserts it.
