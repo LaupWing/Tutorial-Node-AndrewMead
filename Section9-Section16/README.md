@@ -130,3 +130,5 @@
             })
             ```
         *   **deleteOne/deleteMany:** This is exactly like the `insertOne`/`insertMany` methods. But both this one deletes instead of inserts it.
+
+*   **Mongoose:**
