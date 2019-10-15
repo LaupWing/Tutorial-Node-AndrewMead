@@ -132,3 +132,26 @@
         *   **deleteOne/deleteMany:** This is exactly like the `insertOne`/`insertMany` methods. But both this one deletes instead of inserts it.
 
 *   **Mongoose:**
+
+*   **Async/Await**
+    ```js
+    app
+    .use(express.json()) // use this to parse incoming data to an Object
+    .get('/users', async (req,res)=>{
+        // User
+        //     .find({})
+        //     .then(users=>{
+        //         res.send(users)
+        //     })
+        //     .catch(err=>{
+        //         res.status(500).send(err)
+        //     })
+        try{
+            const users = await User.find({})
+            res.send(users)
+        }
+        catch(e){
+            res.status(500).send(e)
+        }
+    })
+    ```

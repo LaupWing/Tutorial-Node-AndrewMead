@@ -33,16 +33,6 @@ app
         catch(e){
             res.status(500).send(err)
         }
-        // Task
-        //     .find({})
-        //     .then(tasks=>{
-        //         res.send(tasks)
-        //     })
-        //     .catch(err=>{
-        //         res
-        //             .status(500)
-        //             .send(err)
-        //     })
     })
     .get('/users/:id', async (req,res)=>{
         const _id = req.params.id
@@ -56,18 +46,6 @@ app
         catch(e){
             res.status(500).send()
         }
-
-        // User
-        //     .findById(_id)
-        //     .then(user=>{
-        //         if(!user){
-        //             return res.status(404).send()
-        //         }
-        //         res.send(user)
-        //     })
-        //     .catch(e=>{
-        //         res.status(500).send()
-        //     })
     })
     .get('/tasks/:id', (req,res)=>{
         const _id = req.params.id
@@ -94,18 +72,6 @@ app
                 .status(400)
                 .send(e)
         }
-        // user
-        //     .save()
-        //     .then((user)=>{
-        //         res
-        //             .status(201)
-        //             .send(user)
-        //     })
-        //     .catch((e)=>{
-        //         res
-        //         .status(400)
-        //         .send(e)
-        //     })
     })
     .post('/tasks', async (req,res)=>{
         const task = new Task(req.body)
@@ -116,18 +82,5 @@ app
         catch(e){
             res.status(400).send(e)
         }
-        // const task = new Task(req.body)
-        // task
-        //     .save()
-        //     .then(task=>{
-        //         res
-        //             .status(201)
-        //             .send(task)
-        //     })
-        //     .catch(e=>{
-        //         res
-        //             .status(400)
-        //             .send(e)
-        //     })
     })
     .listen(port,()=>console.log('app listening to port', port))
