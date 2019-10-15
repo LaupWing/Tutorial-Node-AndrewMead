@@ -18,6 +18,20 @@ app
                 res.status(500).send(err)
             })
     })
+    .get('/tasks', (req,res)=>{
+        Task
+            .find({})
+            .then(tasks=>{
+                res
+                    .status(201)
+                    .send(tasks)
+            })
+            .catch(err=>{
+                res
+                    .status(500)
+                    .send(err)
+            })
+    })
     .get('/users/:id', (req,res)=>{
         const _id = req.params.id
         User
@@ -27,6 +41,20 @@ app
                     return res.status(404).send()
                 }
                 res.send(user)
+            })
+            .catch(e=>{
+                res.status(500).send()
+            })
+    })
+    .get('/tasks/:id', (req,res)=>{
+        const _id = req.params.id
+        Task
+            .findById(_id)
+            .then(task=>{
+                if(!task){
+                    return res.status(404).send()
+                }
+                res.send(task)
             })
             .catch(e=>{
                 res.status(500).send()
