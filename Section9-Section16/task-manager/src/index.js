@@ -16,14 +16,6 @@ app
         catch(e){
             res.status(500).send(e)
         }
-        // User
-        //     .find({})
-        //     .then(users=>{
-        //         res.send(users)
-        //     })
-        //     .catch(err=>{
-        //         res.status(500).send(err)
-        //     })
     })
     .get('/tasks', async (req,res)=>{
         try{
@@ -81,6 +73,29 @@ app
         }   
         catch(e){
             res.status(400).send(e)
+        }
+    })
+    .patch('/users/:id', async (req,res)=>{
+
+        // Check if you can change the property you want to change
+        const updates = Ojbect.keys(req.body)
+        const allowedUpdates = ['name', 'email', 'password', 'age']
+        const isValid = updates.every((update)=>allowedUpdates.includes(update))
+
+        if(!isValid){
+            return res.status(400).send({error: 'Invalid Updates!'})
+        }
+        try{
+            const user = await User.findByIdAndUpdate(req.params.id, {name: req.body}, {new:true, runValidators:true})
+            // In the thrid parameter of the findByIdAndUpdate it is the options parameter
+                // new:true returned the newly updated user with the updates applied
+                // runValidators:true is use the mongoose validator so it will not accept empty strings
+            if(!user){
+                return res.status(404).send()
+            }
+            res.send(user)
+        }catch(e){
+            res.status(404).send(e)
         }
     })
     .listen(port,()=>console.log('app listening to port', port))
