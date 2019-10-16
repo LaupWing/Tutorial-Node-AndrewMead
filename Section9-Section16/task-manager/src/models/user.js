@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
-
+const bcrypt = require('bcryptjs')
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -40,8 +40,17 @@ const userSchema = new mongoose.Schema({
     }
 })
 
+
+// findByIdAndUpdate doesnt work here because mongoose bypasses it so we need to change it > see > routers > users
 userSchema.pre('save', async function(next){
     const user = this
+
+    // Looking for modified password this is a build in mongoose feature
+    if(user.isModified('password')){    
+        user.password = await bcrypt.has(user.password, 8)
+    }
+
+    next()
 })
 
 const User = mongoose.model('User', userSchema)
