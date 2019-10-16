@@ -131,9 +131,30 @@
             ```
         *   **deleteOne/deleteMany:** This is exactly like the `insertOne`/`insertMany` methods. But both this one deletes instead of inserts it.
 
-*   **Mongoose:**
-
-*   **Async/Await**
+*   **Mongoose:** Mongoose is a library which builds on the mongodb library package. It makes crud operations much easier to work with and it adds some additional features to make your server more sufficient. 
+    *   **Models:** This is the operations of the data. Does this item exist? Delete this item. Aka basic crud operations.
+        *   **CRUD:** The crud operations in mongoose if quite basic. You call the model you want to perform the crud operation on and use one of the many crud operation like `findByIdAndDelete` or `findAndDelete`. The only diffrence between those two is that you need id by the first and the second you can freestyle it. There are many more other methods by deleting with mongoose so is for update and add. See the mongoose documentation for the specifications of the operation
+            ```js
+            const tasks = await Task.findByIdAndUpdate(req.params.id, req.body,{new:true, runValidators:true}) // 1st parameter is the search id, 2st parameter is the updated value, 3rd is the options paramater (new is use the newly updated data en runValidators is running the validators first before saving) 
+            ```
+    *   **Schema:** This is the structure of the data. How does it looks like? What kind of properties does it got?
+        *   In the schema properties you can define the settings of this property. Is this field required? You can transform the value to lowercase before saving it in the database and much more.
+            ```js
+            {
+                email:{
+                    type: String,
+                    required: true,
+                    trim: true,
+                    lowercase: true,
+                    validate(value){ // extra validation check
+                        if(!validator.isEmail(value)){
+                            throw new Error('Email is invalid') // Throw error so it stops the code
+                        }
+                    }
+                },
+            }
+            ```
+*   **Async/Await:** The code below is the replacement for the promise chaining. See the commented out code and the replacement code with async await.
     ```js
     app
     .use(express.json()) // use this to parse incoming data to an Object
