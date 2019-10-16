@@ -12,19 +12,17 @@ router
             res.status(500).send(err)
         }
     })
-    .get('/tasks/:id', (req,res)=>{
+    .get('/tasks/:id', async (req,res)=>{
         const _id = req.params.id
-        Task
-            .findById(_id)
-            .then(task=>{
-                if(!task){
-                    return res.status(404).send()
-                }
-                res.send(task)
-            })
-            .catch(e=>{
-                res.status(500).send()
-            })
+        try{
+            const task = await Task.findById(_id)
+            if(!task){
+                return res.status(404).send()
+            }
+            res.send(task)
+        }catch(err){
+            res.status(500).send()
+        }
     })
     .post('/tasks', async (req,res)=>{
         const task = new Task(req.body)
