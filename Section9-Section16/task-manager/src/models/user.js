@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
     },
     email:{
         type: String,
+        unique: true, // prevents double creation of one email
         required: true,
         trim: true,
         lowercase: true,
@@ -40,6 +41,19 @@ const userSchema = new mongoose.Schema({
     }
 })
 
+userSchema.statics.findByCredentials = async (email, password)=>{
+    const user = await User.findOne({email})
+    if(!user){
+        throw new Error('Unable to login')
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password)
+
+    if(!isMatch){
+        throw new Error('Unable to login')
+    }
+    return user
+}
 
 // findByIdAndUpdate doesnt work here because mongoose bypasses it so we need to change it > see > routers > users
 userSchema.pre('save', async function(next){

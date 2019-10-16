@@ -25,6 +25,15 @@ router
             res.status(500).send()
         }
     })
+    .post('/users/login', async (req,res)=>{
+        try{
+            // You can make your own method on the User object
+            const user = await User.findByCredentials(req.body.email, req.body.password)
+            res.send(user)
+        }catch(e){
+            res.status(400).send()
+        }
+    })
     .post('/users', async (req,res)=>{
         const user = new User(req.body)
         try{
