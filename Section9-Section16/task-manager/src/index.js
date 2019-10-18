@@ -3,6 +3,7 @@ require('./db/mongoose.js') // by just requiring the file you ensure that it run
 const app = express()
 const userRouter = require('./routers/user.js')
 const taskRouter = require('./routers/task.js')
+
 const port = process.env.PORT || 3000
 
 const router = new express.Router() // custom routers
@@ -13,12 +14,7 @@ router.get('/test', (req,res)=>{
 
 app
     .use((req,res, next)=>{
-        // if(req.method === 'GET'){
-        //     res.send('GET request are disabled')
-        // }else{
-        //     next()
-        // }
-        res.status(503).send('Site is under maintaince')
+        next()
     })
     .use(express.json()) // use this to parse incoming data to an Object
     .use(userRouter)
