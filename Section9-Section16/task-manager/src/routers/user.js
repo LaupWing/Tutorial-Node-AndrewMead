@@ -29,18 +29,23 @@ router
         try{
             // You can make your own method on the User object
             const user = await User.findByCredentials(req.body.email, req.body.password)
-            res.send(user)
+            const token = await user.generateAuthToken()
+            res.send({user, token})
         }catch(e){
             res.status(400).send()
         }
     })
     .post('/users', async (req,res)=>{
         const user = new User(req.body)
+        console.log(req.body)
         try{
+            const token = await user.generateAuthToken()
+            console.log(token)
             await user.save()
-            res.status(201).send(user)
+            res.status(201).send({user,token})
         }
         catch(e){
+            console.log(e)
             res
                 .status(400)
                 .send(e)

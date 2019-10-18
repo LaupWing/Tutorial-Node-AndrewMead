@@ -12,18 +12,26 @@ router.get('/test', (req,res)=>{
 
 
 app
+    .use((req,res, next)=>{
+        // if(req.method === 'GET'){
+        //     res.send('GET request are disabled')
+        // }else{
+        //     next()
+        // }
+        res.status(503).send('Site is under maintaince')
+    })
     .use(express.json()) // use this to parse incoming data to an Object
     .use(userRouter)
     .use(taskRouter)
     .listen(port,()=>console.log('app listening to port', port))
 
 
-const jwt = require('jsonwebtoken')
-const myFunction = async()=>{
-    const token = jwt.sign({_id: 'abc123'}, 'thisismynewcourse', {expiresIn: '7 days'})
-    console.log(token)
+// const jwt = require('jsonwebtoken')
+// const myFunction = async()=>{
+//     const token = jwt.sign({_id: 'abc123'}, 'thisismynewcourse', {expiresIn: '7 days'})
+//     console.log(token)
 
-    const data = jwt.verify(token, 'thisismynewcourse')
-    console.log(data)
-}
-myFunction()
+//     const data = jwt.verify(token, 'thisismynewcourse')
+//     console.log(data)
+// }
+// myFunction()
