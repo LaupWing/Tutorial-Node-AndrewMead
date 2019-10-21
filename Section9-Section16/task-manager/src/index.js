@@ -22,12 +22,17 @@ app
     .listen(port,()=>console.log('app listening to port', port))
 
 
-// const jwt = require('jsonwebtoken')
-// const myFunction = async()=>{
-//     const token = jwt.sign({_id: 'abc123'}, 'thisismynewcourse', {expiresIn: '7 days'})
-//     console.log(token)
+// const Task = require('./models/task')
+// const User = require('./models/user')
+// const main = async ()=>{
+//     // const task = await Task.findById('5dadf42bee483416f8ee2fe2')
+//     // await task.populate('owner').execPopulate() // populate allows us to populate data from a relationship (its gonna find the user associated with this task)
+//     // console.log(task.owner)
+//     const user = await User.findById('5dadf404ee483416f8ee2fe0')
 
-//     const data = jwt.verify(token, 'thisismynewcourse')
-//     console.log(data)
+//     await user.populate('tasks').execPopulate()
+//     console.log(user.tasks) // this is not actually stored in the databse its a virtual data /(just a relationship)
+//     // await user.populate('')
 // }
-// myFunction()
+
+// main()
