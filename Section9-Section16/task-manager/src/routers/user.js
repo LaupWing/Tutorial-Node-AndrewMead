@@ -7,19 +7,6 @@ router
     .get('/users/me', auth, async (req,res)=>{
         res.send(req.user)
     })
-    .get('/users/:id', async (req,res)=>{
-        const _id = req.params.id
-        try{
-            const user = await User.findById(_id)
-            if(!user){
-                return res.status(404).send()
-            }
-            res.send(user)
-        }
-        catch(e){
-            res.status(500).send()
-        }
-    })
     .post('/users/login', async (req,res)=>{
         try{
             // You can make your own method on the User object
@@ -68,10 +55,10 @@ router
             res.status(500).send(e)
         }
     })
-    .patch('/users/:id', async (req,res)=>{
+    .patch('/users/me', auth, async (req,res)=>{
 
         // Check if you can change the property you want to change
-        const updates = Ojbect.keys(req.body)
+        const updates = Object.keys(req.body)
         const allowedUpdates = ['name', 'email', 'password', 'age']
         const isValid = updates.every((update)=>allowedUpdates.includes(update))
 
@@ -84,26 +71,24 @@ router
                 // In the thrid parameter of the findByIdAndUpdate it is the options parameter
                     // new:true returned the newly updated user with the updates applied
                     // runValidators:true is use the mongoose validator so it will not accept empty strings
-            const user = await User.findById(req.params.id)
+            // const user = await User.findById(req.user._id)
+            // CODE ABOVE IS NO MORE NEEDE BECUASE THE USER IS SAVED IN THE REQ.BODY
+            const user = req.user
             updates.forEach(update=>user[update] = req.body[update])
             await user.save()
-
-            
-            if(!user){
-                return res.status(404).send()
-            }
             res.send(user)
         }catch(e){
             res.status(404).send(e)
         }
     })
-    .delete('/users/:id', async (req,res)=>{
+    .delete('/users/me', auth, async (req,res)=>{
         try{
-            const user = await User.findByIdAndDelete(req.body.id)
-            if(!user){
-                return res.status(404).send()
-            }
-            res.send(user)
+            // const user = await User.findByIdAndDelete(req.user._id)
+            // if(!user){
+            //     return res.status(404).send()
+            // }
+            await req.user.remove() // is the same as above but nicer
+            res.send(req.user)
         }catch(e){
             res.status(500).send()
         }
