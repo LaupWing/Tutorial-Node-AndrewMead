@@ -4,14 +4,8 @@ const router = new express.Router()
 const auth = require('../middleware/auth')
 
 router
-    .get('/users', auth, async (req,res)=>{
-        try{
-            const users = await User.find({})
-            res.send(users)
-        }
-        catch(e){
-            res.status(500).send(e)
-        }
+    .get('/users/me', auth, async (req,res)=>{
+        res.send(req.user)
     })
     .get('/users/:id', async (req,res)=>{
         const _id = req.params.id
@@ -38,7 +32,7 @@ router
     })
     .post('/users', async (req,res)=>{
         const user = new User(req.body)
-        console.log(req.body)
+        
         try{
             const token = await user.generateAuthToken()
             console.log(token)
@@ -50,6 +44,28 @@ router
             res
                 .status(400)
                 .send(e)
+        }
+    })
+    .post('/users/logout', auth, async (req,res)=>{
+        try{
+            req.user.tokens = req.user.tokens.filter(token=>token.token!==req.token)
+            await req.user.save()
+            res.send()
+        }
+        catch(e){
+            console.log(e)
+            res.status(500).send(e)
+        }
+    })
+    .post('/users/logoutAll', auth, async (req,res)=>{
+        try{
+            req.user.tokens = []
+            await req.user.save()
+            res.send()
+        }
+        catch(e){
+            console.log(e)
+            res.status(500).send(e)
         }
     })
     .patch('/users/:id', async (req,res)=>{
