@@ -47,6 +47,8 @@ const userSchema = new mongoose.Schema({
             required: true
         }
     }]
+}, {
+    timestamps: true
 })
 
 // This is not stored in the database its only for mongoose to make a relationship
