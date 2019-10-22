@@ -1,3 +1,21 @@
+### Express
+*   **middleware:** You can add middleware in your express routes by adding your middleware before the callback `(req,res)`. This middleware will be fired off before the sending a request.
+    ```js
+    router
+    .get('/users/me', auth, async (req,res)=>{ // the auth function will be started before sending request
+        res.send(req.user)
+    })
+    ```
+### JSON Web Tokens(JWT)
+JSON web tokens are tokens to make a secure authentication. Along the password the jwt is send to confirm it is actually the user that want to login.
+*   **`sign`:** You can sign aka make a token by using the `.sign` method on the jwt variable. In the `sign` method you need two parematers first value is a object and you are free in what you want to use as the object, second is the secret password which is a String and here you are also free in what you use.
+    ```js
+    const token = jwt.sign({ _id:user._id.toString() }, 'nodetutorial')
+    ```
+*   **`verify`:** `verify` is to verify it is the user that wants to acces this website or to a certain action. It works exactly the same as the `sign` method.
+    ```js
+    const decoded = jwt.verify(token, 'nodetutorial') // this returns a false or true
+    ```
 ### MongoDB
 *   **mongodb** module
     In node you have a mode module made and maintained by the mongodb developers. It makes it easier to connect your node application to your mongodb database.
@@ -174,6 +192,20 @@
             await Tasks.deleteMany({ owner: user._id })
             next()
         })
+        ```
+    *   **Custom Model/Schema Methods:** You can bind custom methods on the schema and models you have created. To make these functions you have to use the `.methods` on these schema's, its also wise to define these custom methods in themodel file. Following the methods comes the name of the method. After defining your method with the corresponding function you can call them on the user models.
+        ```js
+        userSchema.methods.generateAuthToken = async function(){
+            const user = this
+            const token = jwt.sign({ _id:user._id.toString() }, 'nodetutorial')
+            user.tokens = user.tokens.concat({ token })
+            await user.save()
+
+            return token
+        }
+        ```
+        ```js
+        const token = await user.generateAuthToken()
         ```
 *   **Async/Await:** The code below is the replacement for the promise chaining. See the commented out code and the replacement code with async await.
     ```js
