@@ -154,6 +154,27 @@
                 },
             }
             ```
+    *   **Functions before actions(`pre`):** In Mongoose its possible to call a functions some actions are started like delete update or save. This gives us more controle before something happends. These functions can be called by using the `pre` keyword on the schema/model you want to use one. The `pre` keyword accepts two parameters. First parameter you need to define before which action you want to start the function for example before `save` or `remove`. There are more. The second parameter is the function you want to start. In this fucntion you have a next parameter which you need to start before going on with the action you have called.
+        ```js
+         // findByIdAndUpdate doesnt work here because mongoose bypasses it so we need to change it > see > routers > users
+        userSchema.pre('save', async function(next){
+            const user = this
+
+            // Looking for modified password this is a build in mongoose feature
+            if(user.isModified('password')){    
+                user.password = await bcrypt.hash(user.password, 8)
+            }
+
+            next()
+        })
+
+        // Deletes user tasks when user is removed
+        userSchema.pre('remove', async function(next){
+            const user = this
+            await Tasks.deleteMany({ owner: user._id })
+            next()
+        })
+        ```
 *   **Async/Await:** The code below is the replacement for the promise chaining. See the commented out code and the replacement code with async await.
     ```js
     app
