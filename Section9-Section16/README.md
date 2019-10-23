@@ -207,6 +207,41 @@ JSON web tokens are tokens to make a secure authentication. Along the password t
         ```js
         const token = await user.generateAuthToken()
         ```
+    *   **Relationships:** You can make relationships in Node to get both corresponding data. In order to do this you need a shared property between those data.
+        ```js
+        const taskSchema = new mongoose.Schema({
+            description: {
+                type: String,
+                required: true,
+                trim: true
+            },
+            completed: {
+                type: Boolean,
+                default: false
+            },
+            owner:{
+                type: mongoose.Schema.Types.ObjectId, // Data store owner is objectid
+                required: true,
+                ref: 'User' // set up the relationship between task and user
+            }  
+        },{
+            timestamps:true
+        })
+
+        ```
+        By adding the owner property to the schema you are now able to fetch the owner by the special keyword `populate`. This wil add related data to the current data.
+        ```js
+        const task = await Task.findById(someId)
+        await task.populate('owner').execPopulate()
+        ```
+        *   **Virtual data:** In mongoose its possible to create virtual data (data, that is not stored in the database but onlyu for the server to use). This is done with the keyword `virtual` on the schema you want to create a virtual data property. In the virtual methods there are 2 parameters. First is the property you want to call it (you can name it everything), second is an object with the references to the the field and schema. See below for more.
+            ```js
+            userSchema.virtual('tasks',{
+                ref: 'Tasks',  // virtual relation between User and Task schema
+                localField: '_id', // The related field in the current schema
+                foreignField: 'owner' // The related field between the two schema's of the Task 
+            })
+            ```
 *   **Async/Await:** The code below is the replacement for the promise chaining. See the commented out code and the replacement code with async await.
     ```js
     app
