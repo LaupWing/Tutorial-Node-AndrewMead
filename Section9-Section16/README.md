@@ -242,6 +242,48 @@ JSON web tokens are tokens to make a secure authentication. Along the password t
                 foreignField: 'owner' // The related field between the two schema's of the Task 
             })
             ```
+    *   **Filter Sort Pagination:** Its possible to fetch some data in mongoose to make the fetching time a lot shorter. This can be done with querystrings  `www.someurl.com/tasks?completed=true`. The name after the ? is the property you want to filter by and after the = comes the value. To add more querys in your querystring you ned to add a & symbol. 
+        *   **Filter:** Its possible to look for data with a specifik property. In order to do this we need to specify what to filter for in the url example `www.someurl.com/tasks?completed=true` this is called a querystring. Everything behind the ? will be your query. The filter options are stored in the `match` propertty REMEBER TO PARSE THE TRUE STRING BECAUSE IT IS A STRING NOT A REAL BOOLEAN
+            ```js
+            let match = {}
+            if(req.query.completed){
+                        match.completed = req.query.completed === 'true' // if the query sttring is equal to 'true' it returns true
+                    }
+            await req.user.populate({
+                path: 'tasks',
+                match,// which task trying to match converted it saids
+                // match {completed:true}
+                   
+            }).execPopulate()
+            ```
+        *   **Skip & Limit (pagination):** We can skip trough the data and assing how many data we receive by the `skip` and the `limit` keywords. This is stored in the `options` object REMEBER TO PARSE THE NUMBER STRING BECAUSE IT IS A STRING NOT A REAL NUMBER.
+            ```js
+            await req.user.populate({
+                path: 'tasks',
+                options:{
+                    limit: parseInt(req.query.limit),
+                    skip: parseInt(req.query.skip)
+                }
+                   
+            }).execPopulate()
+            ```
+        *   **Sort:** To sort we need to use the `sort` keyword in the `options` object. The sort keyword is an object needs the property to sort by and the value as -1 or 1. 1 for asc (from lowest to highest) -1 desc (from highest to lowest)
+            ```js
+            // QueryString = sortby=createdAt:desc
+            if(req.query.sortBy){
+                const pieces = req.query.sortBy.split(':')
+                sort[pieces[0]] = pieces[1] === 'desc' ? -1 : 1
+            }
+            await req.user.populate({
+                path: 'tasks',
+                match,// which task trying to match
+                options:{
+                    sort
+                }
+                   
+            }).execPopulate()
+            ```
+
 *   **Async/Await:** The code below is the replacement for the promise chaining. See the commented out code and the replacement code with async await.
     ```js
     app

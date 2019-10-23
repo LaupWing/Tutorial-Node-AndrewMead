@@ -5,12 +5,32 @@ const auth = require('../middleware/auth')
 
 router
     .get('/tasks', auth, async (req,res)=>{
+        let match = {}
+        let sort = { }
+        if(req.query.completed){
+            match.completed = req.query.completed === 'true' // if the query sttring is equal to 'true' it returns true
+        }
+
+        if(req.query.sortBy){
+            const pieces = req.query.sortBy.split(':')
+            sort[pieces[0]] = pieces[1] === 'desc' ? -1 : 1
+        }
         try{
-            const tasks = await Task.find({owner: req.user._id})
-            res.send(tasks)
+            await req.user.populate({
+                path: 'tasks',
+                match,// which task trying to match
+                options:{
+                    limit: parseInt(req.query.limit),
+                    skip: parseInt(req.query.skip),
+                    sort
+                }
+                   
+            }).execPopulate()
+
+            res.send(req.user.tasks)
             // The below is the same as the above
-            // await req.user.populate('tasks').execPopulate()
-            // res.send(req.user.task)
+            // const tasks = await Task.find({owner: req.user._id})
+            // res.send(tasks)
         }
         catch(e){
             res.status(500).send(err)
