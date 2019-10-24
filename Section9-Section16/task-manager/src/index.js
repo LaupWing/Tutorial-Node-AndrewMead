@@ -5,20 +5,6 @@ const userRouter = require('./routers/user.js')
 const taskRouter = require('./routers/task.js')
 const port = process.env.PORT || 3000
 
-
-const multer = require('multer')
-const upload = multer({
-    dest: 'images', // destination of the file
-    limits:{
-        fileSize: 2000000
-    }
-})
-
-app.post('/upload',upload.single('upload'), (req,res)=>{
-    res.send()
-})
-
-
 app
     .use((req,res, next)=>{
         next()
