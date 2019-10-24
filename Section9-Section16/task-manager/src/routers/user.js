@@ -28,7 +28,7 @@ router
                 throw new Error()
             }
 
-            res.set('Content-Type', 'image/jpg') // set header 
+            res.set('Content-Type', 'image/png') // set header 
             res.send(user.avatar)
 
         }catch(e){
@@ -67,7 +67,7 @@ router
                 width: 250,
                 height: 250
             })
-            .png
+            .png()
             .toBuffer()
 
         req.user.avatar = buffer
