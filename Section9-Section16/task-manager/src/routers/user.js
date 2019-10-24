@@ -2,6 +2,25 @@ const express = require('express')
 const User = require('../models/user')
 const router = new express.Router()
 const auth = require('../middleware/auth')
+const multer = require('multer')
+
+
+const upload = multer({
+    dest: 'avatars', // destination of the file
+    limits:{
+        fileSize: 1000000
+    },
+    fileFilter(req,file,cb){
+        if(!file.originalname.match(/\.(jpg|png)$/)){
+            return cb(new Error('Please upload a proper image file'))
+        }
+        cb(undefined, true)
+    }
+})
+
+const errorMiddleware = (req,res, next)=>{
+    throw new Error('From my middleware')
+}
 
 router
     .get('/users/me', auth, async (req,res)=>{
@@ -32,6 +51,9 @@ router
                 .status(400)
                 .send(e)
         }
+    })
+    .post('/users/me/avatar', upload.single('avatar'), (req,res)=>{
+        res.send()
     })
     .post('/users/logout', auth, async (req,res)=>{
         try{

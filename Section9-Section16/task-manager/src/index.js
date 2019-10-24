@@ -3,12 +3,19 @@ require('./db/mongoose.js') // by just requiring the file you ensure that it run
 const app = express()
 const userRouter = require('./routers/user.js')
 const taskRouter = require('./routers/task.js')
-
 const port = process.env.PORT || 3000
 
-const router = new express.Router() // custom routers
-router.get('/test', (req,res)=>{
-    res.send('This is my custom router')
+
+const multer = require('multer')
+const upload = multer({
+    dest: 'images', // destination of the file
+    limits:{
+        fileSize: 2000000
+    }
+})
+
+app.post('/upload',upload.single('upload'), (req,res)=>{
+    res.send()
 })
 
 
@@ -36,3 +43,6 @@ app
 // }
 
 // main()
+
+
+
