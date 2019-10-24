@@ -6,7 +6,6 @@ const multer = require('multer')
 
 
 const upload = multer({
-    dest: 'avatars', // destination of the file
     limits:{
         fileSize: 1000000
     },
@@ -17,10 +16,6 @@ const upload = multer({
         cb(undefined, true)
     }
 })
-
-const errorMiddleware = (req,res, next)=>{
-    throw new Error('From my middleware')
-}
 
 router
     .get('/users/me', auth, async (req,res)=>{
@@ -52,7 +47,10 @@ router
                 .send(e)
         }
     })
-    .post('/users/me/avatar', upload.single('avatar'), (req,res)=>{
+    .post('/users/me/avatar', auth, upload.single('avatar'), async (req,res)=>{
+        console.log(req.file)
+        req.user.avatar = req.file.buffer
+        await req.user.save()
         res.send()
     },(error, req, res, next)=>{
         res.status(400).send({
@@ -114,6 +112,15 @@ router
             //     return res.status(404).send()
             // }
             await req.user.remove() // is the same as above but nicer
+            res.send(req.user)
+        }catch(e){
+            res.status(500).send()
+        }
+    })
+    .delete('/users/me/avatar', auth, async (req,res)=>{
+        try{
+            req.user.avatar = undefined
+            req.user.save()
             res.send(req.user)
         }catch(e){
             res.status(500).send()
