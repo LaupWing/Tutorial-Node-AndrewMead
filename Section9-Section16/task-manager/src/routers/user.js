@@ -54,6 +54,10 @@ router
     })
     .post('/users/me/avatar', upload.single('avatar'), (req,res)=>{
         res.send()
+    },(error, req, res, next)=>{
+        res.status(400).send({
+            error: error.message
+        })
     })
     .post('/users/logout', auth, async (req,res)=>{
         try{
