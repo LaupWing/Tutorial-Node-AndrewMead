@@ -4,6 +4,8 @@ const router = new express.Router()
 const auth = require('../middleware/auth')
 const multer = require('multer')
 const sharp = require('sharp')
+const { sendWelcomeEmail, sendCancelEmail} = require('../emails/account')
+
 
 const upload = multer({
     limits:{
@@ -50,8 +52,9 @@ router
         
         try{
             const token = await user.generateAuthToken()
-            console.log(token)
             await user.save()
+            console.log(user)
+            sendWelcomeEmail(user.email, user.name)
             res.status(201).send({user,token})
         }
         catch(e){
@@ -132,6 +135,7 @@ router
             // if(!user){
             //     return res.status(404).send()
             // }
+            sendCancelEmail(req.user.email, req.user.name)
             await req.user.remove() // is the same as above but nicer
             res.send(req.user)
         }catch(e){

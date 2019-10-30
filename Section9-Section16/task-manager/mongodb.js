@@ -6,7 +6,7 @@ const ObjectID = mongodb.ObjectID
 const connectionUrl = 'mongodb://127.0.0.1:27017'
 const databaseName = 'task-manager'
 
-MongoClient.connect(connectionUrl, {useNewUrlParser:true, useUnifiedTopology:true},(error, client)=>{
+MongoClient.connect(process.env.MONGO, {useNewUrlParser:true, useUnifiedTopology:true},(error, client)=>{
     // if(error){
     //     return console.log('Unable to connect',error)
     // }

@@ -3,7 +3,7 @@ require('./db/mongoose.js') // by just requiring the file you ensure that it run
 const app = express()
 const userRouter = require('./routers/user.js')
 const taskRouter = require('./routers/task.js')
-const port = process.env.PORT || 3000
+const port = process.env.PORT
 
 app
     .use((req,res, next)=>{
