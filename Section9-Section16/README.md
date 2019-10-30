@@ -306,3 +306,21 @@ JSON web tokens are tokens to make a secure authentication. Along the password t
         }
     })
     ```
+*   SendGrid
+    SendGrid is an service that sends emails to your users via their server(API).
+    *   Sendgrid node package
+        To use the sendgrid api you need to require the sgmail package and set the apikey. And thats actually it!. After that you are free to send whatever email you want via the node package.
+        ```js
+        const sgMail = require('@sendgrid/mail')
+        const sendGridAPIKey = 'BLALBLABLA'
+
+        sgMail.setApiKey(sendGridAPIKey)
+
+        sgMail.send({
+            to: 'locdragon@gmail.com',  // to who
+            from: 'loc_strict@hotmail.com', // from who
+            subject: 'This is my first creation!', // title
+            text: 'Email content' // content (you can use html)
+        })
+
+        ```
