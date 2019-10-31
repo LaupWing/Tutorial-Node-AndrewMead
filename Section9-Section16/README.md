@@ -306,7 +306,7 @@ JSON web tokens are tokens to make a secure authentication. Along the password t
         }
     })
     ```
-*   SendGrid
+*   **SendGrid**
     SendGrid is an service that sends emails to your users via their server(API).
     *   Sendgrid node package
         To use the sendgrid api you need to require the sgmail package and set the apikey. And thats actually it!. After that you are free to send whatever email you want via the node package.
@@ -323,4 +323,10 @@ JSON web tokens are tokens to make a secure authentication. Along the password t
             text: 'Email content' // content (you can use html)
         })
 
+        ```
+*   **environment variables**
+    Enviroment variables are variables that can be used to store your sensitive information. This is used to store your api keys for example. These env files can be ignored by github so that it will only run on the server. A `env` file is recognized by the `.env`extension.
+    *   **env-cmd node package:** In order to get those environment variables you need to run some code (or package) to activate the `.env` varibales in the environment. We use in this example the `env-cmd` node package. What you only need to do with this package is run it in the command prompt after you have installed it. By calling `env-cmd` and following that is a `-f` to find the file and after that the path to that file `path`
+        ```bash
+        env-cmd -f ./config/dev.env nodemon index.js
         ```
