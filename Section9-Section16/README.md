@@ -330,3 +330,9 @@ JSON web tokens are tokens to make a secure authentication. Along the password t
         ```bash
         env-cmd -f ./config/dev.env nodemon index.js
         ```
+
+*   **Heroku**
+    *   **Heroku Env:** To set environment variables in Heroku you need to use the config keyword:
+        *   **`config`:** By typing `heroku config` you will see all the environmet variables in you current heroku app
+        *   **`config:set`:** By typing `config:set` you can set the environment variables for heroku first is the key and than the value like `heroku config:set key=value`.
+        *   **`conifg:unset`:** To remove a env variable you need to use `config:unset` following by the name of the env variable like `heroku config:unset key`
