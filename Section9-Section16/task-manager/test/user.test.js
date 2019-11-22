@@ -1,24 +1,9 @@
 const request = require('supertest')
 const app = require('../src/app')
 const User = require('../src/models/user')
-const jwt = require('jsonwebtoken')
-const mongoose = require('mongoose')
+const {setupDatabase, userOne, userOneId} = require('./fixtures/db')
 
-const userOneId = new mongoose.Types.ObjectId() // we need to reference this outside the user because we are going to use this in multiple places
-const userOne = {
-    _id: userOneId,
-    name: 'Test',
-    email: 'test@example.com',
-    password: 'test123',
-    tokens: [{
-        token: jwt.sign({_id:userOneId}, process.env.JWT_SECRET)
-    }]
-}
-
-beforeEach(async ()=>{
-    await User.deleteMany()
-    await new User(userOne).save()
-})
+beforeEach(setupDatabase)
 
 test('Should signup a new user', async()=>{
     const response = await request(app)
@@ -96,3 +81,37 @@ test('Should not delete profile unauth user', async()=>{
         .expect(401)
 })
 
+test('Should upload avatar image', async()=>{
+    await request(app)
+        .post('/users/me/avatar')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .attach('avatar', 'test/fixtures/profile-pic.jpg')
+        .expect(200)
+    const user = await User.findById(userOneId)
+    expect(user.avatar).toEqual(expect.any(Buffer)) // to check if any Buffer (its a type check)
+    // .toBe =  ===
+    // .toEqual = ==
+})
+
+test('Should update valid user fields', async()=>{
+    const name = 'Gerald'
+    await request(app)
+        .patch('/users/me')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .send({
+            name
+        })
+    const user = await User.findById(userOneId)
+    expect(user.name).toBe(name) 
+})
+
+test('Should not update invalid user fields', async()=>{
+    const name = 'Gerald'
+    await request(app)
+        .patch('/users/me')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .send({
+            location: name
+        })
+        .expect(400) 
+})
