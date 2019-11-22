@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 
 const userOneId = new mongoose.Types.ObjectId() // we need to reference this outside the user because we are going to use this in multiple places
-
 const userOne = {
     _id: userOneId,
     name: 'Test',
@@ -22,7 +21,7 @@ beforeEach(async ()=>{
 })
 
 test('Should signup a new user', async()=>{
-    await request(app)
+    const response = await request(app)
         .post('/users')
         .send({
             name: 'Jest',
@@ -30,13 +29,31 @@ test('Should signup a new user', async()=>{
             password: 'MypassJEst123'
         })
         .expect(201)
+    
+    // Assert that the database was changed correctly
+    const user = await User.findById(response.body.user._id)
+    // console.log('------------------------------------------------------',user)
+    expect(user).not.toBeNull()
+
+    // Assertions about the response
+    console.log('-------------------------------------',response.body)
+    expect(response.body).toMatchObject({
+        user:{
+            name: 'Jest',
+            email: 'jest@hotmail.com'
+        },
+        token: user.tokens[0].token
+    })
+    expect(user.password).not.toBe('MypassJEst123')
 })
 
 test('Should login existing user', async()=>{
-    await request(app).post('/users/login').send({
+    const response = await request(app).post('/users/login').send({
         email: userOne.email,
         password: userOne.password
     }).expect(200)
+    const user = await User.findById(userOneId)
+    expect(response.body.token).toBe(user.tokens[1].token)
 })
 test('Should not login non existing user', async()=>{
     await request(app)
@@ -68,6 +85,8 @@ test('Should delete user profile for user', async()=>{
         .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
         .send()
         .expect(200)
+    const user = await User.findById(userOneId)
+    expect(user).toBeNull()
 })
 
 test('Should not delete profile unauth user', async()=>{
@@ -76,3 +95,4 @@ test('Should not delete profile unauth user', async()=>{
         .send()
         .expect(401)
 })
+
