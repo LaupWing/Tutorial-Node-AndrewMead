@@ -17,11 +17,12 @@ app
 
 io.on('connection', (socket)=>{
     console.log('New websocket connection')
-    socket.emit('countUpdated', count)
+    const message = 'Welcome to the chat app'
+    socket.emit('message', message)
 
-    socket.on('increment',()=>{
-        count++
-        io.emit('countUpdated', count)
+    socket.on('sendingMessage',(value)=>{
+        console.log(value)
+        io.emit('setChat', value)
     })
 })
 server.listen(port,()=>console.log(`Server is listening to port ${port}`))
