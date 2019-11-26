@@ -2,25 +2,19 @@ const socket = io()
 const messages = document.querySelector('#messages')
 const messageTemplate = document.querySelector('#message-template').innerHTML
 const locationTemplate = document.querySelector('#location-template').innerHTML
-
+const timeFormat = 'HH:mm a'
 socket.on('message',(message)=>{
     const html = Mustache.render(messageTemplate,{
-        message
+        message: message.text,
+        createdAt: moment(message.createdAt).format(timeFormat)
     })
     messages.insertAdjacentHTML('beforeend', html)
 })
 
-socket.on('setChat',(message)=>{
-    
-    const html = Mustache.render(messageTemplate,{
-        message
-    })
-    messages.insertAdjacentHTML('beforeend', html)
-})
-
-socket.on('locationMessage',(url)=>{
+socket.on('locationMessage',(location)=>{
     const html = Mustache.render(locationTemplate,{
-        location: url
+        location: location.url,
+        createdAt: moment(location.createdAt).format(timeFormat)
     })
     messages.insertAdjacentHTML('beforeend', html)
 })

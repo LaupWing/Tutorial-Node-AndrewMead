@@ -9,7 +9,8 @@ const io = socketio(server)
 
 const port = process.env.PORT || 3000
 const publicPath = path.join(__dirname, '../public')
-
+const {messageObject,
+    locationObject} = require('./utils/messages')
 
 app
     .use(express.static(publicPath))
@@ -18,24 +19,25 @@ app
 io.on('connection', (socket)=>{
     console.log('New websocket connection')
     const message = 'Welcome to the chat app'
-    socket.emit('message', message)
-    socket.broadcast.emit('message', 'A new user has joined')
+    socket.emit('message', messageObject(message))
+    socket.broadcast.emit('message', messageObject('A new user has joined'))
     socket.on('sendingMessage',(value, cb)=>{
-        console.log(value)
         const filter = new Filter()
         if(filter.isProfane(value)){
             return cb('Profanity is not allowed!')
         }
         // if(value)
-        io.emit('setChat', value)
+        io.emit('message', messageObject(value))
         cb()
     })
     socket.on('sendLocation',(value,cb)=>{
         cb('Location has been shared')
-        io.emit('locationMessage', `https://google.com/maps?q=${value.lat},${value.long}`)
+        io.emit('locationMessage', locationObject(`https://google.com/maps?q=${value.lat},${value.long}`))
     })
     socket.on('disconnect',()=>{
-        io.emit('message', 'A user has left')
+        io.emit('message', messageObject('A user has left'))
     })
 })
+
+
 server.listen(port,()=>console.log(`Server is listening to port ${port}`))
