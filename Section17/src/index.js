@@ -32,7 +32,7 @@ io.on('connection', (socket)=>{
     })
     socket.on('sendLocation',(value,cb)=>{
         cb('Location has been shared')
-        io.emit('message', `https://google.com/maps?q=${value.lat},${value.long}`)
+        io.emit('locationMessage', `https://google.com/maps?q=${value.lat},${value.long}`)
     })
     socket.on('disconnect',()=>{
         io.emit('message', 'A user has left')
