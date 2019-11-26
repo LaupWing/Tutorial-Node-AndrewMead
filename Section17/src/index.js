@@ -19,23 +19,30 @@ app
 io.on('connection', (socket)=>{
     console.log('New websocket connection')
     const message = 'Welcome to the chat app'
-    socket.emit('message', messageObject(message))
-    socket.broadcast.emit('message', messageObject('A new user has joined'))
+    socket.on('join', ({username,room})=>{
+        socket.join(room)
+        socket.emit('message', messageObject(message))
+        socket.broadcast.to(room).emit('message', messageObject(`${username} has joined`))
+    })
+
+
     socket.on('sendingMessage',(value, cb)=>{
         const filter = new Filter()
         if(filter.isProfane(value)){
             return cb('Profanity is not allowed!')
         }
         // if(value)
-        io.emit('message', messageObject(value))
+        io.to('1').emit('message', messageObject(value))
         cb()
     })
+
     socket.on('sendLocation',(value,cb)=>{
         cb('Location has been shared')
-        io.emit('locationMessage', locationObject(`https://google.com/maps?q=${value.lat},${value.long}`))
+        io.to('1').emit('locationMessage', locationObject(`https://google.com/maps?q=${value.lat},${value.long}`))
     })
+
     socket.on('disconnect',()=>{
-        io.emit('message', messageObject('A user has left'))
+        io.to('1').emit('message', messageObject('A user has left'))
     })
 })
 
