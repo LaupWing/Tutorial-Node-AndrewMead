@@ -20,7 +20,6 @@ const addUser =({id, username ,room})=>{
         }
     }
     const user = {username,room,id}
-    // Store user
     users.push(user)
     return user
 }
@@ -33,14 +32,16 @@ const removeUser = (id)=>{
 }
 
 const getUser =(id)=>{
-    const findUser = users.find(user=>user.id===id)
-    return findUser
+    return users.find(user=>user.id===id)
 }
 
 const getUsersInRoom = (roomName)=>{
-    const room = users.filter(user=>user.room === roomName)
-    if(room){
-        return room
-    }
-    return []
+    return users.filter(user=>user.room === roomName)
+}
+
+module.exports ={
+    addUser,
+    removeUser,
+    getUser,
+    getUsersInRoom
 }
