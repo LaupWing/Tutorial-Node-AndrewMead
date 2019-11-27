@@ -1,15 +1,22 @@
+// Elements
 const socket = io()
 const messages = document.querySelector('#messages')
+const form = document.querySelector('form#chat')
+const locationBtn = document.querySelector('#send-location')
+
+// Templates
 const messageTemplate = document.querySelector('#message-template').innerHTML
 const locationTemplate = document.querySelector('#location-template').innerHTML
-const timeFormat = 'HH:mm a'
+const sidebarTemplate = document.querySelector('#sidebar-template').innerHTML
 
+// Options
 const {username, room} = Qs.parse(location.search, {ignoreQueryPrefix:true})
+const timeFormat = 'HH:mm a'
 
 
 socket.on('message',(message)=>{
     const html = Mustache.render(messageTemplate,{
-        username: messasge.username,
+        username: message.username,
         message: message.text,
         createdAt: moment(message.createdAt).format(timeFormat)
     })
@@ -25,9 +32,14 @@ socket.on('locationMessage',(location)=>{
     messages.insertAdjacentHTML('beforeend', html)
 })
 
+socket.on('roomData', ({room,users})=>{
+    const html = Mustache.render(sidebarTemplate, {
+        room,
+        users
+    })
+    document.querySelector('#sidebar').innerHTML = html
+})
 
-const form = document.querySelector('form#chat')
-const locationBtn = document.querySelector('#send-location')
 form.addEventListener('submit',(event)=>{
     event.preventDefault()
     const input = event.target.elements.message
