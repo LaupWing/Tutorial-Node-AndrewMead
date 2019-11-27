@@ -1,12 +1,14 @@
-const messageObject = (value) => {
+const messageObject = (username,value) => {
     return {
+        username,
         text: value,
         createdAt: new Date().getTime()
     }
 }
 
-const locationObject = (url)=>{
+const locationObject = (username, url)=>{
     return{
+        username,
         url,
         createdAt: new Date().getTime()
     }

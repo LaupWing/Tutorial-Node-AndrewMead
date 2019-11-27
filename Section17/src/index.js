@@ -6,7 +6,7 @@ const Filter = require('bad-words')
 const app = express()
 const server = http.createServer(app)
 const io = socketio(server)
-
+const {addUser, removeUser, getUser, getUsersInRoom} = require('./utils/users')
 const port = process.env.PORT || 3000
 const publicPath = path.join(__dirname, '../public')
 const {messageObject,
@@ -19,30 +19,41 @@ app
 io.on('connection', (socket)=>{
     console.log('New websocket connection')
     const message = 'Welcome to the chat app'
-    socket.on('join', ({username,room})=>{
-        socket.join(room)
-        socket.emit('message', messageObject(message))
-        socket.broadcast.to(room).emit('message', messageObject(`${username} has joined`))
+    socket.on('join', ({username,room},cb)=>{
+        const {error, user} = addUser({id: socket.id, username,room})
+        if(error){
+            return cb(error)
+        }
+        socket.join(user.room)
+        socket.emit('message', messageObject('Admin',message))
+        socket.broadcast.to(user.room).emit('message', messageObject('Admin',`${user.username} has joined`))
+        cb()
     })
 
 
     socket.on('sendingMessage',(value, cb)=>{
+        const user = getUser(socket.id)
         const filter = new Filter()
         if(filter.isProfane(value)){
             return cb('Profanity is not allowed!')
         }
         // if(value)
-        io.to('1').emit('message', messageObject(value))
+        io.to(user.room).emit('message', messageObject(user.username,value))
         cb()
     })
 
     socket.on('sendLocation',(value,cb)=>{
+        const user = getUser(socket.id)
+
         cb('Location has been shared')
-        io.to('1').emit('locationMessage', locationObject(`https://google.com/maps?q=${value.lat},${value.long}`))
+        io.to(user.room).emit('locationMessage', locationObject(user.username,`https://google.com/maps?q=${value.lat},${value.long}`))
     })
 
     socket.on('disconnect',()=>{
-        io.to('1').emit('message', messageObject('A user has left'))
+        const user = removeUser(socket.id)
+        if(user){
+            io.to(user.room).emit('message', messageObject(`${user.username} has left`))
+        }
     })
 })
 
